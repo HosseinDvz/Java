@@ -29,7 +29,19 @@ I have strictly followed the above architecture. I will briefly explain differen
  #### Fuzzification
   &nbsp;&nbsp; Process of finding the degree of membership of a value in a fuzzy set is called fuzzification which can be done by defining membership functions.<br/>
  In the codes, the class Fuzzification does this process. There are some private functions and one public function (*centerOfGeravity*) in this class. <br/>
- I defined three levels of water namely High, no change , low for and a membership function for each of them and three levels for rate of change (errorDot).  
+ &nbsp;&nbsp;I defined three levels of water namely High, no change , low and a membership function for each of them and three levels for rate of change (errorDot).
+ I will explain the process by an example. Assume the difference between the current and desired level of water is 2 meters. We pass this number to three different membership functions, *noChangeMemFunc*, *highMemFunc* and *lowMemFunc* to see how much that differece belongs to those three sets. For example the difference might be cosnsidered 75% high, 20% no change and 5% low. The rate of change in the level of water is also important. I defined three membership fucnctions namely, *noChangeErrorDotMemFunc*, *highErrorDotMemFunc* and lowErrorDotMemFunc to interpret the rate of change. For example, if the rate of change is 0.002, we interpret it as 30% high, 60% no change, and 10% low. <br/>
+ &nbsp;&nbsp; This is very important part of the design. I interpreted the difference of **one** meter as high and the rate of change less than -0.003 as low rate of change but how did I find those numbers? There is no rule to find these number. You should find it by trial and error. If you look at the returned numbers by the differential equation and the levels of waters we are going to work with, you might guess some initial numbers for them and tune them after some trial and errors.
+ #### Inference Engine
+&nbsp;&nbsp; The process of drawing conclusions from existing data is called inference. For each rule, the inference engine looks up the membership values in the antecedents of the rule.The membership values are combined by fuzzy conjunction  (fuzzy AND i.e. A AND B = min(A,B)) to evaluate the degree of truth of the rule i. <br/>
+We have a rule base in inference engin.<br/>
+Look at the following table:
+<p align="center"><img src = "images/FuzzyRullMatrix.jpg"><br/>
+ 
+ We have three sets here. In the codes their names are *lowSet* (Four memebers), *highSet* (four memebers) and *noChangeSet* (one member). 
+ 
+
+
 
 
  
