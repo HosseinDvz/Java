@@ -48,7 +48,7 @@ Look at the following table:
  
  This calculations are in Fuzzification class. Finally I use this number to calculate the voltage. Calculating the voltage is in *Defuzzification* class. It has just one method which calculate the voltage based on the CoG.<br/>
  
- ### Fuzzy Controller
+ ### Fuzzy Controlle
 
 
 
