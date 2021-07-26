@@ -2,6 +2,11 @@ package waterTankFuzzyLogic;
 
 public class Fuzzification {
 	
+	/**Defining Fuzzy And*/
+	private static double fuzzyAnd(double x,double y) {
+		return Math.min(x,y);
+	}
+	
 	
 	/**Defining membership function for no change situation i.e
 	 when -1 < error = curr - desi < 1 */
@@ -95,10 +100,10 @@ public class Fuzzification {
 		double lowRSS = 0;
 		double[] lowSet = new double[4];
 		
-		lowSet[0] = Math.min(lowMemFunc(error),lowErrorDotMemFunc(errorDot));
-		lowSet[1] = Math.min(lowMemFunc(error),noChangeErrorDotMemFunc(errorDot));
-		lowSet[2] = Math.min(lowMemFunc(error),highErrorDotMemFunc(errorDot));
-		lowSet[3] = Math.min(noChangeMemFunc(error),lowErrorDotMemFunc(errorDot));
+		lowSet[0] = fuzzyAnd(lowMemFunc(error),lowErrorDotMemFunc(errorDot));
+		lowSet[1] = fuzzyAnd(lowMemFunc(error),noChangeErrorDotMemFunc(errorDot));
+		lowSet[2] = fuzzyAnd(lowMemFunc(error),highErrorDotMemFunc(errorDot));
+		lowSet[3] = fuzzyAnd(noChangeMemFunc(error),lowErrorDotMemFunc(errorDot));
 		
 		for (int i = 0; i < lowSet.length; i++)
 			lowRSS = lowRSS + Math.pow(lowSet[i] ,2);
@@ -115,10 +120,10 @@ public class Fuzzification {
 		double highRSS = 0;
 		double[] highSet = new double[4];
 		
-		highSet[0] = Math.min(highMemFunc(error), lowErrorDotMemFunc(errorDot));
-		highSet[1] = Math.min(highMemFunc(error), noChangeErrorDotMemFunc(errorDot));
-		highSet[2] = Math.min(highMemFunc(error), highErrorDotMemFunc(errorDot));
-		highSet[3] = Math.min(noChangeMemFunc(error), highErrorDotMemFunc(errorDot));
+		highSet[0] = fuzzyAnd(highMemFunc(error), lowErrorDotMemFunc(errorDot));
+		highSet[1] = fuzzyAnd(highMemFunc(error), noChangeErrorDotMemFunc(errorDot));
+		highSet[2] = fuzzyAnd(highMemFunc(error), highErrorDotMemFunc(errorDot));
+		highSet[3] = fuzzyAnd(noChangeMemFunc(error), highErrorDotMemFunc(errorDot));
 		
 		for (int i = 0; i < highSet.length; i++)
 			highRSS = highRSS + Math.pow(highSet[i] ,2);
