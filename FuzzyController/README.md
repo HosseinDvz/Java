@@ -229,7 +229,7 @@ Desired level of water: 13.0   Current level of water: 13.00000000281057   curre
 <p align="center"><img src = "images/HtLWater.png"><br/>
 <p align="center"><img src = "images/HtLVoltage.jpg"><br/>
 
-&nbsp;&nbsp; The fuzzy controller performs well. In my simulation, I did not use the actual unit of time because the problem description does not give us any information about the frequency of changing the voltage in a time interval (i.e. we do not know that we can update the voltage every second or every 10 seconds or anything else).
+&nbsp;&nbsp; The fuzzy controller performs well. In my simulation, I did not use the actual unit of time because the problem description does not give us any information about the frequency of changing the voltage in a time interval (i.e. we do not know that we can update the voltage every second or every 10 seconds or anything else), However, it is easy to fit the actual unit of time in this simulation.
 
 
  
