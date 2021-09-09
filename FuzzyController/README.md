@@ -1,15 +1,15 @@
 # Fuzzy Logic Level Control of a Cylindrical Water Tank
 ## Problem Definition
 
-&nbsp;&nbsp; Consider a cylindrical water tank. Water enters the tank from the top at a rate proportional to the voltage, V, applied to the pump. The water leaves through an opening in the tank base at a rate that is proportional to the square root of the water height, H, in the tank. The presence of the square root in the water flow rate results in a nonlinear plant.<br/>
+&nbsp;&nbsp; Consider a cylindrical water tank. Water enters the tank from the top at a rate proportional to the voltage, (V), applied to the pump. The water leaves through an opening in the tank base, at a rate that is proportional to the square root of the water height, (H), in the tank. The presence of the square root in the water flow rate results in a nonlinear plant.<br/>
 
 <p align="center"><img src = "images/WaterTank.jpg"><br/>
  
  The differential equation for the tank is given by: <br/>
  <p align="center"><img src = "images/DifferentialEqu.jpg"><br/>
    
- where R is the radius of the tank, H is actual water height in the tank, V is the voltage applied to the pump, a (in m^2 per minute) is a constant related to the flow rate out of the tank and b (in m^3 per minute per volt) is a constant related to the flow rate into the tank. The goal is to design a fuzzy logic controller for the pump so that the water level is always at the desired level.<br/>
-I am going to simulate my design in these two condition:<br/>
+ where (R) is the radius of the tank, (H) is actual water height in the tank, (V) is the voltage applied to the pump, a (in m^2 per minute) is a constant related to the flow rate out of the tank and b (in m^3 per minute per volt) is a constant related to the flow rate into the tank. The goal is to design a fuzzy logic controller for the pump, so that the water level is always at the desired level.<br/>
+I am going to simulate my design for these two condition:<br/>
  - **a**: R = 5m, V(max) = 48 volts, a = 0.1, b = 0.01 , Desired Height: *will be given by the user*
  - **b**: R = 5m, V(max) = 48 volts, b = 0.01, Desired Height: *will be given by the user*, a = 0.1 when t(time) <= 20 and a = 0.2 when t > 20<br/>
 ## Solution
@@ -18,23 +18,23 @@ I am going to simulate my design in these two condition:<br/>
    A fuzzy controller have the folowing architecture:<br/>
 <p align="center"><img src = "images/FuzzyModel.jpg"><br/>  
   
-&nbsp;&nbsp; I have strictly followed the above architecture. I will briefly explain different parts of the model and how I code it in Java but to better understand it you should already be familiar with fuzzy logic concepts like  fuzzy sets, different types of Membership Functions (MF), and different ways of defuzzification.<br/>
+I have strictly followed the above architecture. I will briefly explain different parts of the model and how I coded it in Java but, to better understand it you should already be familiar with fuzzy logic concepts like  fuzzy sets, different types of Membership Functions (MF), and different ways of defuzzification.<br/>
  #### Process or Plant
-  &nbsp;&nbsp; Our plant is a Water tank which I have a class with this name in the code. In addition to setters and getters, It has two methods for calculating the **error = currentHeight - desiredHeight** and a method for printing the water tank current situation.
+Our plant is a Water tank, which I have a class with this name in the code. In addition to setters and getters, it has two methods for calculating the **error = currentHeight - desiredHeight** and a method for printing the water tank current situation.
 
 
   #### Sensors
- &nbsp;&nbsp; Our sensor here is the above first-order differential equation. Based on the current height of the water tank (which will be determined by the user) and other related parameters, that equation tells us how the level of water will change.<br/>
- &nbsp;&nbsp; The class *Euler* handle this differential equation; It does two jobs: Firstly, It calculate the rate of change in the height which can directly be calculated by the equation, and secondly, it will numerically solve the differential equation and calculate (approximates with high accuracy) the level of the water at a specific time. To numerically solve the above first-order differential equation, I used one of the oldest and easiest methods devised by **Euler** and is called, oddly enough, Euler’s Method. See the following diagram and equation:<br/>
+Our sensor here is the above first-order differential equation. Based on the current height of the water tank (which will be determined by the user) and other related parameters, that equation tells us how the level of water will change.<br/>
+The class *Euler* handles this differential equation; It does two jobs: Firstly, It calculates the rate of change in the height which can directly be calculated by the equation, and secondly, it will numerically solve the differential equation and calculate (approximates with high accuracy) the level of the water at a specific time. To numerically solve the above first-order differential equation, I used one of the oldest and easiest methods devised by **Euler** which is called, oddly enough, Euler’s Method. See the following diagram and equation:<br/>
 <p align="center"><img src = "images/dif.jpg"><br/>
 <p align="center"><img src = "images/Euler.jpg"><br/>
  
-&nbsp;&nbsp;For our problem, I decided to return the height of water every 20 units of time but the step size to go from t to t+20 is 0.0025. As you know and you can also see in the above picture, a smaller step size results in a more accurate approximation.
+For our problem, I decided to return the height of water every 20 units of time but the step size to go from t to t+20 is 0.0025. As you know and you can also see in the above picture, a smaller step size results in a more accurate approximation.
 
  #### Fuzzification
-  &nbsp;&nbsp; The process of finding the degree of membership of a value in a fuzzy set is called fuzzification which can be done by defining membership functions.<br/>
+ The process of finding the degree of membership of a value in a fuzzy set is called fuzzification which can be done by defining membership functions.<br/>
  In the codes, the class Fuzzification does this process. There are some private methods and one public method (*centerOfGeravity*) in this class. <br/>
- &nbsp;&nbsp; I defined three levels of water namely High, no change, low and a membership function for each of them, and three levels for the rate of change (errorDot).
+ I defined three levels of water namely High, no change, low and a membership function for each of them, and three levels for the rate of change (errorDot).
  I will explain the process by an example. Assume the difference between the current and desired level of water is 2 meters. We pass this number to three different membership functions, *noChangeMemFunc*, *highMemFunc*, and *lowMemFunc* to see how much that difference belongs to those three fuzzy sets. For example, the difference might be considered 75% high, 20% no change, and 5% low. The rate of change in the level of water is also important. I defined three membership functions namely, *noChangeErrorDotMemFunc*, *highErrorDotMemFunc* and lowErrorDotMemFunc to interpret the rate of change. For example, if the rate of change is 0.002, we might interpret it like 30% high, 60% no change, and 10% low. <br/>
  &nbsp;&nbsp; This is a very important part of the design. I interpreted the difference of **one** or more meters as *high* and the rate of change -0.003 or less as a low rate of change and assigned the membership value of **1** (the highest) to both of them but how did I find those numbers? Well, there is no rule to find these numbers. You should find it by trial and error. I looked at the range of returned numbers by the differential equation and the levels of waters we are going to work with and guessed some initial numbers for them, and tuned them after some trial and error.
  #### Inference Engine
