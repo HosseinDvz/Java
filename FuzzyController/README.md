@@ -39,7 +39,7 @@ For our problem, I decided to return the height of water every 20 units of time 
  &nbsp;&nbsp; This is a very important part of the design. I interpreted the difference of **one** or more meters as *high* and the rate of change -0.003 or less as a low rate of change and assigned the membership value of **1** (the highest) to both of them but how did I find those numbers? Well, there is no rule to find these numbers. You should find it by trial and error. I looked at the range of returned numbers by the differential equation and the levels of waters we are going to work with and guessed some initial numbers for them, and tuned them after some trial and error.
  #### Inference Engine
 &nbsp;&nbsp; The process of drawing conclusions from existing data is called inference. For each rule, the inference engine looks up the membership values in the antecedents of the rule.The membership values are combined by fuzzy conjunction  (fuzzy AND i.e. A AND B = min(A,B)) to evaluate the degree of truth of the rule i. <br/>
-We have a rule base in inference engin.<br/>
+We have a rule base in inference engine.<br/>
 Look at the following table:
 <p align="center"><img src = "images/FuzzyRullMatrix.jpg"><br/>
  
