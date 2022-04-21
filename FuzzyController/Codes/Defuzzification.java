@@ -1,7 +1,7 @@
 package waterTankFuzzyLogic;
 
 /*
- * This class caculate the volatage that should be applied to the pomp 
+ * This class caculate the volatage that should be applied to the pump 
  */
 public class Defuzzification {
 	private static final double MAX_VOLTAGE = 48.0; //maximum pomp voltage
